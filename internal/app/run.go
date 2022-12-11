@@ -22,9 +22,9 @@ const (
 func Run() {
 	var wg sync.WaitGroup
 
-	// 1 страница == 35 товаров
-	for i := 1; i <= 1; i++ {
-		wg.Add(4)
+	// i == Кол-во страниц которые будут собраны
+	for i := 1; i <= 15; i++ {
+		wg.Add(5)
 		var (
 			urlElectronic = fmt.Sprintf("https://www.sbazar.cz/30-elektro-pocitace/cela-cr/cena-neomezena/nejnovejsi/%s", strconv.Itoa(i))
 			urlСlothing   = fmt.Sprintf("https://www.sbazar.cz/15-obleceni-obuv-doplnky/cela-cr/cena-neomezena/nejnovejsi/%s", strconv.Itoa(i))

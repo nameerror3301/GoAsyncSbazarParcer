@@ -26,18 +26,19 @@ type RequesLast struct {
 	} `json:"product_data"`
 }
 
-var Elec []RequesLast
-var Сlothing []RequesLast
-var Hobby []RequesLast
-var BabyMoM []RequesLast
-var Sport []RequesLast
+var (
+	Elec     []RequesLast
+	Сlothing []RequesLast
+	Hobby    []RequesLast
+	BabyMoM  []RequesLast
+	Sport    []RequesLast
+)
 
 // Универсальная функция для сбора данных со всех категорий
 func FindProduct(url string, category string) error {
-	idx := 1
 	data, err := Request(url)
 	if err != nil {
-		logrus.Println(err)
+		return err
 	}
 	defer data.Close()
 
@@ -53,15 +54,19 @@ func FindProduct(url string, category string) error {
 		c := colly.NewCollector()
 
 		c.OnHTML("div[class=p-uw-item__content]", func(e *colly.HTMLElement) {
-			productName := e.DOM.Find("h1[class=p-uw-item__header]").Text()
-			photoUrl, _ := e.DOM.Find("div[class=ob-c-carousel__item-content] img").Attr("src")
-			description := e.DOM.Find("p[class=p-uw-item__description]").Text()
-			price := e.DOM.Find("div[class=p-uw-item__first-line] b[class=c-price__price]").Text()
-			currency := e.DOM.Find("span[class=c-price__currency]").Text()
+			// Сбор данных о пользователе в объявлении
 			userName := e.DOM.Find("div[class=c-seller-info__name-wrapper]").Text()
 			dateCreate := e.DOM.Find("div[class=c-seller-info__date]").Text()
 			phoneNumber := e.DOM.Find("span[itemprop=telephone]").Text()
 
+			// Сбор данных товара
+			productName := e.DOM.Find("h1[class=p-uw-item__header]").Text()
+			photoUrl, _ := e.DOM.Find("div[class=ob-c-carousel__item-content] img").Attr("src")
+			price := e.DOM.Find("div[class=p-uw-item__first-line] b[class=c-price__price]").Text()
+			currency := e.DOM.Find("span[class=c-price__currency]").Text()
+			description := e.DOM.Find("p[class=p-uw-item__description]").Text()
+
+			// Добавление данных в нужные структуры
 			switch category {
 			case "Elec":
 				AppendData(&Elec, userName, dateCreate, phoneNumber, productName, fmt.Sprintf("https:%s", photoUrl), price, currency, description, val)
@@ -75,7 +80,7 @@ func FindProduct(url string, category string) error {
 				AppendData(&Sport, userName, dateCreate, phoneNumber, productName, fmt.Sprintf("https:%s", photoUrl), price, currency, description, val)
 			}
 
-			logrus.Infof("%d -> %s [%s]\n", idx, val, category)
+			logrus.Infof("%s [%s]\n", val, category)
 		})
 
 		c.OnError(func(r *colly.Response, err error) {
@@ -84,7 +89,6 @@ func FindProduct(url string, category string) error {
 		})
 
 		c.Visit(val)
-		idx++
 	})
 	return nil
 }
