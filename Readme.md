@@ -9,9 +9,11 @@
 ## Структура проекта
 
 ```.
+.
 ├── app
 │   └── cmd
 │       └── main.go
+├── Dockerfile
 ├── go.mod
 ├── go.sum
 ├── internal
@@ -20,8 +22,6 @@
 │   ├── config
 │   │   ├── config.go
 │   │   └── config.yaml
-│   ├── logs
-│   │   └── info.txt
 │   └── models
 │       └── sbazar.go
 └── Readme.md
