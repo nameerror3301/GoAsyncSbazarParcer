@@ -46,6 +46,7 @@ func FindProduct(url string, category string) error {
 	doc, err := goquery.NewDocumentFromReader(data)
 	if err != nil {
 		logrus.Errorf("Err load data - %s", err)
+
 	}
 	defer data.Close()
 
@@ -85,6 +86,7 @@ func FindProduct(url string, category string) error {
 
 		c.OnError(func(r *colly.Response, err error) {
 			logrus.Errorf("Request URL:", r.Request.URL, "failed with response:", r, "\nError:", err)
+
 			time.Sleep(time.Second * 5)
 		})
 
@@ -128,6 +130,7 @@ func Request(url string) (io.ReadCloser, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		logrus.Errorf("Err responce - %d %s", resp.StatusCode, resp.Status)
+
 		time.Sleep(time.Second * 5)
 	}
 
