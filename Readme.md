@@ -37,7 +37,7 @@
 
 ## Разработчики
 
-- [OneByteForLife](https://github.com/nameerror3301)
+- [OneByteForLife](https://github.com/OneByteForLife)
 
 ## Лицензия
 
